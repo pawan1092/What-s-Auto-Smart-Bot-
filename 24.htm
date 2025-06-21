@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Auto Smart Bot</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@emoji-mart/css@latest/emoji-mart.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    :root {
+      --primary-bg: #001f2f;
+      --accent: gold;
+      --card-bg: #004d4d;
+      --hover-bg: #006666;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--primary-bg);
+      color: var(--accent);
+    }
+    .page { display: none; min-height: 100vh; flex-direction: column; }
+    .active { display: flex !important; }
+
+    /* Tile styles */
+    .dashboard {
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+    }
+    .tile {
+      background-color: var(--card-bg);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      transition: all 0.25s ease;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .tile:hover {
+      background-color: var(--hover-bg);
+      transform: translateY(-4px);
+    }
+  
+#emoji-picker-container {
+  position: absolute;
+  z-index: 9999;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.page { display: none !important; }
+.page.active { display: flex !important; flex-direction: column; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js" type="module"></script>
+<style>
+emoji-picker {
+  z-index: 9999;
+  position: absolute;
+  max-height: 350px;
+  max-width: 320px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  border-radius: 12px;
+}
+</style>
+</head>
+<script>
+document.addEventListener("click", e => {
+  const p = document.getElementById("profileSidebar");
+  const s = document.getElementById("settingsSidebar");
+  if (!p.contains(e.target) && !e.target.closest('[onclick="toggleProfileSidebar()"]')) p.classList.add("hidden");
+  if (!s.contains(e.target) && !e.target.closest('[onclick="toggleSettingsSidebar()"]')) s.classList.add("hidden");
+});
+</script>
+<body>
+<!-- ✅ SUBSCRIBE PAGE -->
+<div class="page active subscribe-page" id="subscribePage" style="justify-content: center; align-items: center; background: linear-gradient(135deg, #fbc7d4, #ffffff, #cdb4db);">
+<div class="subscribe-box" style="background: ; border-radius: 24px; padding: 2rem; max-width: 360px; width: 100%; box-shadow: 0 12px 24px rgba(219, 39, 119, 0.3); text-align: center;">
+<h1 style="color: #db2777; font-weight: 700; font-size: 1.4rem;">WHAT'S AUTO SMART BOT</h1>
+<p style="color: #db2777;">By COSMOS ENTERPRISES</p>
+<p style="color: #db2777; font-size: 1rem; margin-bottom: 1.5rem;">Subscribe once, enjoy lifetime free access to all features!</p>
+<div id="paymentPrompt">
+<span style="color: #db2777;">Subscribe for lifetime access — only ₹3</span>
+<button <button="" class="subscribe-btn shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1 shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1" id="subscribeNowBtn" style="background: #db2777; color: white; font-weight: 700; font-size: 1.1rem; padding: 0.8rem 2rem; border-radius: 9999px;">Subscribe Now</button>
+</div>
+<div class="qr-section" id="qrSection" style="display: none; flex-direction: column; align-items: center; margin-top: 2rem;">
+<button onclick="shareNow()" style="padding: 8px 20px; background-color: #db2777; color: white; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 5px rgba(0,0,0,0.2);">
+<span style="font-size: 18px;">📥 Share</span>
+</button>
+<div style="display: flex; justify-content: center; margin-top: 20px;">
+<img alt="QR Code" src="qr.jpg" style="width: 220px; height: 220px; object-fit: contain; border-radius: 14px; border: 2px solid #db2777; box-shadow: 0 0 10px rgba(0,0,0,0.1); background: white; padding: 8px;"/>
+</div>
+<p style="color:  #db2777;">UPI ID: cosmos382enterprises@okicici</p>
+<button class="shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1 shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1" id="paidBtn" style="background: none; color: #db2777; text-decoration: underline;">I have paid</button>
+</div>
+<p style="color: #db2777; font-size: 0.8rem; margin-top: 1.5rem;">100% safe | No hidden fees</p>
+</div>
+</div>
+<!-- ✅ COVER PAGE -->
+<div class="page cover-page" id="coverPage" style="justify-content: center; align-items: center; text-align: center; background-color: #003b4f; padding: 2rem;">
+<h1 data-i18n="welcome" style="font-size: 2.8rem; color: white ;">Welcome to Auto Smart Bot</h1>
+<div style="margin: 25px 0; font-size: 1rem; color: white;">
+    Auto Reply  Chat bot  Bulk Messaging  Payment Reminders
+  </div>
+<div style="display: flex; justify-content: center; align-items: center; height: 200px;">
+<button class="start-button shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1 shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1" onclick="goToPage('dashboardPage')" style="padding: 15px 40px; font-size: 1.2rem; border: 2px ; background: transparent; color: white ; border-radius: 10px; cursor: pointer; font-weight: bold;">Start</button>
+</div>
+<div style="margin-top: auto; padding-top: 40px; font-size: 0.85rem; color: #ccc;">
+    Powered by Cosmos Enterprises
+  </div>
+</div>
+<!-- ✅ DASHBOARD PAGE START -->
+<div class="page" id="dashboardPage" style="background-color: white;">
+<div class="top-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #002c3a;">
+<div onclick="toggleProfileSidebar()" style="width: 60px; height: 60px; border-radius: 50%; background: #f9c6d4; display: flex; justify-content: center; align-items: center; cursor: pointer;" title="Profile">
+<img alt="P" id="topProfilePic" src="" style="width: 56px; height: 56px; border-radius: 50%; object-fit: cover; display: none;"/>
+<span id="defaultProfileIcon" style="font-size: 2rem; color: white;">👤</span>
+</div>
+<i class="fas fa-ellipsis-v" onclick="toggleSettingsSidebar()" style="color: white; font-size: 1.2rem;" title="Settings"></i>
+</div>
+<!-- Dashboard Tiles -->
+<div class="dashboard">
+<div class="tile shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1">Chat Message Box</div>
+<div class="tile shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1">Invoice &amp; Payment</div>
+<div class="tile shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1">Appointment Booking</div>
+<div class="tile shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1">Food Booking</div>
+<div class="tile shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1">Transport Booking</div>
+</div>
+</div>
+<!-- ✅ PROFILE SIDEBAR -->
+<div class="hidden" id="profileSidebar" style="position: absolute; top: 85px; left: 20px; width: 350px; z-index: 20; background: teal; border-radius: 20px; padding: 20px;">
+<div class="bg-teal shadow-xl rounded-2xl p-6 w-full max-w-md relative z-10">
+<h2 class="text-2xl font-bold text-center text-white mb-4">Profile</h2>
+<div class="flex justify-center relative">
+<div class="relative">
+<div class="w-32 h-32 bg-white rounded-full flex items-center justify-center text-black text-lg cursor-pointer overflow-hidden" id="profile-pic">
+<span id="image-text">Image</span>
+<img alt="Profile" class="hidden w-full h-full object-cover rounded-full" id="profile-image" src=""/>
+</div>
+<div class="hidden absolute top-0 left-full ml-4 bg-white p-2 rounded-lg shadow space-y-1 z-20" id="image-options">
+<label class="cursor-pointer block text-pink-600 hover:underline">Upload<input accept="image/*" class="hidden" id="upload-input" type="file"/></label>
+<button class="text-pink-600 hover:underline w-full text-left shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1" onclick="showModal()">️View</button>
+<button class="text-pink-600 hover:underline w-full text-left shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1" onclick="openCameraModal()">Camera</button>
+<button class="text-pink-600 hover:underline w-full text-left shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1" onclick="removeImage()">️Remove</button>
+</div>
+</div>
+</div>
+<div class="mt-6">
+<label class="text-white : text-sm">Your Name</label>
+<div class="flex items-center space-x-2 mt-1 relative">
+<input class="w-full border-0 border-b-2 border-#FFFFFF bg-transparent focus:outline-none text-white-#FFFFFF id=" name-input"="" type="text" value="Your Name"/>
+<button class="shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1 shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1" onclick="editField('name-input', this)">✏️</button>
+<button class="text-xl shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1" id="emoji-name">😊</button>
+</div>
+</div>
+<div class="mt-4">
+<label class="text-white : text-sm">About</label>
+<div class="flex items-center space-x-2 mt-1 relative">
+<input class="w-full border-0 border-b-2 border-white-#FFFFFF bg-transparent focus:outline-none text-white-#FFFFFF" id="about-input" type="text" value="Hey there! I'm using this app."/>
+<button class="shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1 shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1" onclick="editField('about-input', this)">✏️</button>
+<button class="text-xl shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1" id="emoji-about">😊</button>
+</div>
+</div>
+<div class="mt-6">
+<button class="w-full bg-white-#FFFFFF text-white py-2 rounded-lg hover:bg-pink-600 shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1" onclick="saveChanges()">✅ Save Changes</button>
+</div>
+</div>
+</div>
+<!-- ✅ EMOJI PICKER CONTAINER -->
+<emoji-picker class="hidden" data-category-order="smileys-people,nature,foods,activity,travel,objects,symbols,flags" emoji-version="14.0" id="emoji-picker-container"></emoji-picker>
+<!-- ✅ VIEW IMAGE MODAL -->
+<div class="hidden fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50" id="viewModal">
+<div class="bg-white rounded-lg p-4">
+<img class="max-w-full max-h-[80vh] rounded-lg" id="modalImage" src=""/>
+<div class="text-right mt-2">
+<button class="text-pink-600 hover:underline shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1" onclick="closeModal()">Close</button>
+</div>
+</div>
+</div>
+<!-- ✅ CAMERA MODAL -->
+<div class="hidden fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50" id="cameraModal">
+<div class="bg-white rounded-lg p-4 flex flex-col items-center">
+<video autoplay="" class="rounded w-64 h-48 bg-black" id="cameraFeed" playsinline=""></video>
+<button class="mt-4 bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600 shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1" onclick="capturePhoto()">Click</button>
+<button class="mt-2 text-pink-600 hover:underline shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1" onclick="closeCameraModal()">Cancel</button>
+</div>
+</div>
+<!-- ✅ SETTINGS PANEL -->
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>App Settings Panel</title>
+<style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+    }
+    #settingsSidebar {
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      background: #00695c;
+      color: white;
+      padding: 20px;
+      overflow: hidden;
+    }
+    .panel {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .panel.active {
+      display: flex;
+    }
+    .function-list {
+      list-style: none;
+      padding: 0;
+    }
+    .function-list li {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      cursor: pointer;
+    }
+    .function-list li:hover {
+      background-color: rgba(255,255,255,0.1);
+    }
+    .back-btn {
+      font-size: 20px;
+      cursor: pointer;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 8px;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid white;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+    option {
+      background-color: #004d40;
+      color: white;
+    }
+    .color-circle {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: inline-block;
+      margin: 5px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      border: 2px solid white;
+    }
+    .btn {
+      background: white;
+      color: #00695c;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    .toggle-switch input:checked + .slider {
+      background-color: #4CAF50;
+    }
+    .toggle-switch input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    .invite-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+    }
+    .privacy-option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    <style>
+  #settingsSidebar input[type="text"],
+  #settingsSidebar select {
+    background-color: teal !important;
+    color: black !important;
+    border: 1px solid #ccc;
+  }
+  #settingsSidebar option {
+    color: black;
+    background-color: white;
+  }
+</style>
+</head>
+<body>
+<div class="hidden" id="settingsSidebar" style="
+  position: absolute;
+  top: 75px;
+  right: 20px;
+  width: 300px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: #00695c;
+  color: white;
+  padding: 20px;
+  border-radius: 16px;
+  z-index: 9999;">
+<div class="panel active" id="panel1">
+<h2 data-i18n="settings">Settings</h2>
+<ul class="function-list">
+<li id="accountBtn">Account</li>
+</ul>
+<button class="block w-full text-left px-4 py-2 hover:bg-teal-700" onclick="linkDevice()"> Linked Device</button>
+<button class="block w-full text-left px-4 py-2 hover:bg-teal-700" data-func="appInfo"> App Info</button>
+<button class="block w-full text-left px-4 py-2 hover:bg-teal-700" onclick="logoutApp()"> Logout</button>
+</div>
+<div class="panel" id="panel2"></div>
+<div class="panel" id="panel3"></div>
+<!-- panel4 - Linked Device Function -->
+<!-- panel5 - Linked Device UI -->
+<!-- panel6 - App Info Function -->
+<!-- panel7 - App Info UI -->
+<!-- panel8 - Logout Function -->
+<!-- panel9 - Logout UI -->
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const panels = {
+    panel1: document.getElementById('panel1'),
+    panel2: document.getElementById('panel2'),
+    panel3: document.getElementById('panel3'),
+  };
+
+  function showPanel(id) {
+    Object.values(panels).forEach(p => p.classList.remove('active'));
+    panels[id].classList.add('active');
+  }
+
+  document.getElementById("accountBtn").addEventListener("click", () => {
+    panels.panel2.innerHTML = `
+      <div class="back-btn" id="backTo1">←</div>
+      <h3>Account</h3>
+      <ul class="function-list">
+        <li data-func="addAccount">Add Account</li>
+        <li data-func="appLanguage">App Language</li>
+        <li data-func="notification">Notification</li>
+        <li data-func="invite">Invite Friend</li>
+        <li data-func="theme">Theme Color</li>
+        <li data-func="privacy">Privacy</li>
+        <li data-func="update">App Update</li>
+      </ul>`;
+    
+    showPanel('panel2');
+
+    document.getElementById("backTo1").addEventListener("click", () => showPanel('panel1'));
+
+    panels.panel2.querySelectorAll("[data-func]").forEach(item => {
+      item.addEventListener("click", () => openFunctionPanel(item.dataset.func));
+    });
+  });
+
+  function openFunctionPanel(func) {
+    const back = `<div class="back-btn" id="backTo2">←</div>`;
+    let html = "";
+
+    switch(func) {
+      case 'appInfo':
+        html = `${back}
+          <h3>App Info</h3>
+          <p><strong>App:</strong> Auto Smart Bot</p>
+          <p><strong>Version:</strong> 1.0.0</p>
+          <p><strong>Developer:</strong> Cosmos Enterprises</p>
+          <p><strong>Website:</strong> www.cosmosmeta.in</p>
+          <p><strong>Support:</strong> autosmartbot.helpdesk@gmail.com</p>
+          <p><strong>License:</strong> Lifetime Free</p>
+          <p><strong>Updated:</strong> June 2025</p>`;
+        break;
+
+      case 'addAccount':
+        html = `${back}
+          <h3>Add Account</h3>
+          <div style="position: relative;">
+            <input id="emailInput" type="text" placeholder="Enter Email" readonly />
+            <span id="editEmail" style="position:absolute; right:0; top:0; cursor:pointer;">✎</span>
+          </div>
+          <div style="position: relative; margin-top:15px;">
+            <input id="phoneInput" type="text" placeholder=" Contact Number +Country Code" readonly />
+            <span id="editPhone" style="position:absolute; right:0; top:0; cursor:pointer;">✎</span>
+          </div>
+          <button id="verifyBtn" class="btn" style="margin-top: 15px;">Verify</button>`;
+        break;
+
+      case 'appLanguage':
+        html = `${back}
+          <h3>App Language</h3>
+          <select id="languageSelect" style="padding:10px; background:#004d40; color:white;">
+            <option disabled selected>Select Language</option>
+              <option value="hi">हिन्दी</option><option value="bn">বাংলা</option><option value="te">తెలుగు</option>
+              <option value="mr">मराठी</option><option value="ta">தமிழ்</option><option value="gu">ગુજરાતી</option>>
+              <option value="pa">ਪੰਜਾਬੀ</option><option value="ur">ار</option><option value="en-IN">English (India)</option>
+              <option value="en">English (US)</option><option value="fr">Français</option>
+              <option value="es">Español</option><option value="de">Deutsch</option>
+              <option value="it">Italiano</option><option value="pt">Português</option>
+              <option value="zh">中文</option><option value="ja">日本語</option>
+              <option value="ko">한국어</option><option value="ru">Русский</option>
+          </select>
+          <p id="languageStatus" style="margin-top:10px;"></p>`;
+        break;
+
+      case 'notification':
+        html = `${back}
+          <h3>Notification</h3>
+          <label class="toggle-switch">
+            <input type="checkbox" id="notifToggle" checked>
+            <span class="slider"></span>
+          </label>`;
+        break;
+
+      case 'invite':
+        html = `${back}
+          <h3>Invite Friend</h3>
+          <div class="invite-row">
+            <span>Rahul Sharma</span>
+            <button class="btn" onclick="alert('SMS sent')">Invite</button>
+          </div>
+          <div class="invite-row">
+            <span>Priya Verma</span>
+            <button class="btn" onclick="alert('SMS sent')">Invite</button>
+          </div>`;
+        break;
+      case 'theme':
+        const colors = ['#004d40', '#00695c', '#00796b', '#1a237e', '#4527a0', '#c62828', '#37474f', '#000000', '#800000', '#808000' , '#FF00FF' , '#00FF00' , '#7FFFD4' , '#FFC0CB','#C0C0C0', '#FFA07A', '#FF0000', '#FA8072' , '#FFC0CB' , '#FF69B4','#FF1493' , '#C71585' , '#FF6347' , '#FF4500' , '#FFA500' , '#FFD700' , '#FFFF00' , '#00CED1', '#00FFFF' , '#00BFFF', '#DAA520', '#B8860B', '#800000' ,'#DAA520', '#006400','#FFFFFF','#996515', '#ffcc00', '#e4d00a', 
+             '#9c7c38']
+        html = `${back}<h3>Theme Color</h3><div>`;
+        html += colors.map(c => `<span class="color-circle" style="background:${c}" onclick="document.getElementById('dashboardPage').style.background='${c}'"></span>`).join('');
+        html += `</div>`;
+        break;
+      case 'privacy':
+        html = `${back}
+          <h3>Privacy</h3>
+          <div class="privacy-option">
+            <label>Who can see my profile photo?</label>
+            <select id="photoOption">
+              <option>Everyone</option>
+              <option>Contacts</option>
+              <option>No one</option>
+            </select>
+          </div>
+          <div class="privacy-option">
+            <label>Who can see my about?</label>
+            <select id="aboutOption">
+              <option>Everyone</option>
+              <option>Contacts</option>
+              <option>No one</option>
+            </select>
+          </div>
+          <div class="privacy-option">
+            <label>Live Location</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="liveLocationToggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <button class="btn" id="savePrivacyBtn">Save</button>`;
+        break;
+
+      case 'update':
+        html = `${back}
+          <h3>App Update</h3>
+          <p>Your app is up to date.</p>
+          <button class="btn" onclick="alert('Checking for updates...')">Check for Update</button>`;
+        break;
+
+      default:
+        html = `${back}<p>Function not found.</p>`;
+    }
+
+    panels.panel3.innerHTML = html;
+    showPanel('panel3');
+
+    setTimeout(() => {
+      document.getElementById("backTo2")?.addEventListener("click", () => showPanel('panel2'));
+
+      if (func === 'addAccount') {
+        document.getElementById("editEmail").onclick = () => {
+          document.getElementById("emailInput").removeAttribute("readonly");
+          document.getElementById("emailInput").focus();
+        };
+        document.getElementById("editPhone").onclick = () => {
+          document.getElementById("phoneInput").removeAttribute("readonly");
+          document.getElementById("phoneInput").focus();
+        };
+        document.getElementById("verifyBtn").onclick = verifyAccount;
+      }
+
+      if (func === 'appLanguage') {
+        const langSelect = document.getElementById('languageSelect');
+        const status = document.getElementById('languageStatus');
+        const saved = localStorage.getItem("appLang");
+        if (saved && langSelect.querySelector(`[value="${saved}"]`)) {
+          langSelect.value = saved;
+          status.textContent = "✅ Current Language: " + langSelect.options[langSelect.selectedIndex].text;
+        }
+        langSelect.addEventListener("change", () => {
+          const selected = langSelect.value;
+          const name = langSelect.options[langSelect.selectedIndex].text;
+          localStorage.setItem("appLang", selected);
+          status.textContent = "✅ Language set to: " + name;
+applyTranslations(selected);
+        });
+      }
+
+      if (func === 'privacy') {
+        const photoSelect = document.getElementById("photoOption");
+        const aboutSelect = document.getElementById("aboutOption");
+        const liveToggle = document.getElementById("liveLocationToggle");
+
+        const savedPhoto = localStorage.getItem("privacy_photo");
+        const savedAbout = localStorage.getItem("privacy_about");
+        const savedLive = localStorage.getItem("privacy_live");
+
+        if (savedPhoto) photoSelect.value = savedPhoto;
+        if (savedAbout) aboutSelect.value = savedAbout;
+        if (savedLive !== null) liveToggle.checked = (savedLive === "On");
+
+        document.getElementById("savePrivacyBtn").addEventListener("click", () => {
+          localStorage.setItem("privacy_photo", photoSelect.value);
+          localStorage.setItem("privacy_about", aboutSelect.value);
+          localStorage.setItem("privacy_live", liveToggle.checked ? "On" : "Off");
+        });
+      }
+
+    }, 20);
+  }
+
+  let verifiedAccount = { email: '', phone: '' };
+
+  function verifyAccount() {
+    const email = document.getElementById('emailInput')?.value.trim();
+    const phone = document.getElementById('phoneInput')?.value.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phonePattern = /^\+?[0-9]{7,16}$/;
+
+    if (!email || !phone) return alert("❌ Enter both Email and Phone.");
+    if (!emailPattern.test(email)) return alert("❌ Invalid Email.");
+    if (!phonePattern.test(phone)) return alert("❌ Invalid Phone.");
+
+    verifiedAccount.email = email;
+    verifiedAccount.phone = phone;
+
+    document.getElementById("emailInput").setAttribute("readonly", true);
+    document.getElementById("phoneInput").setAttribute("readonly", true);
+
+    alert(`✅ Account Verified & Saved:\n📧 ${email}\n📱 ${phone}`);
+  }
+});
+</script>
+<!-- ✅ FINAL FIX SCRIPT -->
+<script>
+// 1. Panel auto-close on outside click (but not on input or emoji or button)
+document.addEventListener("click", function (event) {
+  const panels = [
+    "settingsSidebar", "profileSidebar", "cameraModal", "viewModal", "emoji-picker-container"
+  ];
+  for (let id of panels) {
+    const panel = document.getElementById(id);
+    if (panel && !panel.classList.contains("hidden")) {
+      const clickedInside = panel.contains(event.target);
+      const isInteractive = event.target.closest("input, textarea, button, label, svg, span, i, select");
+      const isTrigger = event.target.closest(`[onclick*="toggle"]`) || event.target.closest(`#${id}`);
+      if (!clickedInside && !isInteractive && !isTrigger) {
+        panel.classList.add("hidden");
+      }
+    }
+  
+}
+
+// 3. Emoji picker logic
+const emojiPicker = document.getElementById('emoji-picker-container');
+let currentTargetInput = null;
+
+});
+
+});
+
+function showEmojiPicker(triggerBtn) {
+  const rect = triggerBtn.getBoundingClientRect();
+  emojiPicker.style.left = `${rect.left + window.scrollX}px`;
+  emojiPicker.style.top = `${rect.top + window.scrollY - emojiPicker.offsetHeight - 5}px`;
+  emojiPicker.classList.remove("hidden");
+}
+
+emojiPicker?.addEventListener("emoji-click", e => {
+  if (currentTargetInput) {
+    currentTargetInput.value += e.detail.unicode;
+  }
+});
+});
+</script>
+<script>
+function applyTranslations(lang) {
+  const dictionary = {
+    "en": {
+      "welcome": "Welcome to Auto Smart Bot",
+      "logout": "Logout",
+      "settings": "Settings"
+    },
+    "hi": {
+      "welcome": "ऑटो स्मार्ट बॉट में आपका स्वागत है",
+      "logout": "लॉगआउट",
+      "settings": "सेटिंग्स"
+    },
+    "bn": {
+      "welcome": "অটো স্মার্ট বট-এ স্বাগতম",
+      "logout": "লগআউট",
+      "settings": "সেটিংস"
+    },
+    "te": {
+      "welcome": "ఆటో స్మార్ట్ బాట్‌కి స్వాగతం",
+      "logout": "లాగ్అవుట్",
+      "settings": "సెట్టింగ్స్"
+    },
+    "mr": {
+      "welcome": "ऑटो स्मार्ट बॉटमध्ये आपले स्वागत आहे",
+      "logout": "बाहेर पडा",
+      "settings": "सेटिंग्ज"
+    },
+    "ta": {
+      "welcome": "ஆட்டோ ஸ்மார்ட் பாட்டுக்கு வரவேற்கிறோம்",
+      "logout": "வெளியேறு",
+      "settings": "அமைப்புகள்"
+    },
+    "gu": {
+      "welcome": "ઓટો સ્માર્ટ બોટમાં આપનું સ્વાગત છે",
+      "logout": "લૉગઆઉટ",
+      "settings": "સેટિંગ્સ"
+    },
+    "pa": {
+      "welcome": "ਆਟੋ ਸਮਾਰਟ ਬੋਟ ਵਿੱਚ ਤੁਹਾਡਾ ਸਵਾਗਤ ਹੈ",
+      "logout": "ਲਾਗ ਆਉਟ",
+      "settings": "ਸੈਟਿੰਗਜ਼"
+    },
+    "ur": {
+      "welcome": "آٹو سمارٹ بوٹ میں خوش آمدید",
+      "logout": "لاگ آؤٹ",
+      "settings": "سیٹنگز"
+    },
+    "fr": {
+      "welcome": "Bienvenue sur Auto Smart Bot",
+      "logout": "Se déconnecter",
+      "settings": "Paramètres"
+    },
+    "es": {
+      "welcome": "Bienvenido a Auto Smart Bot",
+      "logout": "Cerrar sesión",
+      "settings": "Configuraciones"
+    },
+    "de": {
+      "welcome": "Willkommen bei Auto Smart Bot",
+      "logout": "Abmelden",
+      "settings": "Einstellungen"
+    },
+    "it": {
+      "welcome": "Benvenuto in Auto Smart Bot",
+      "logout": "Disconnettersi",
+      "settings": "Impostazioni"
+    },
+    "pt": {
+      "welcome": "Bem-vindo ao Auto Smart Bot",
+      "logout": "Sair",
+      "settings": "Configurações"
+    },
+    "zh": {
+      "welcome": "欢迎使用Auto Smart Bot",
+      "logout": "登出",
+      "settings": "设置"
+    },
+    "ja": {
+      "welcome": "オートスマートボットへようこそ",
+      "logout": "ログアウト",
+      "settings": "設定"
+    },
+    "ko": {
+      "welcome": "오토 스마트 봇에 오신 것을 환영합니다",
+      "logout": "로그아웃",
+      "settings": "설정"
+    },
+    "ru": {
+      "welcome": "Добро пожаловать в Auto Smart Bot",
+      "logout": "Выйти",
+      "settings": "Настройки"
+    }
+  };
+
+  const translations = dictionary[lang];
+  if (!translations) return;
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (translations[key]) el.innerText = translations[key];
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const lang = localStorage.getItem("appLang");
+  if (lang) applyTranslations(lang);
+
+  const savedColor = localStorage.getItem("themeColor");
+  if (savedColor) {
+    const dash = document.getElementById("dashboardPage");
+    if (dash) dash.style.backgroundColor = savedColor;
+  }
+});
+</script>
+<script>
+function showPanel(funcPanelId, uiPanelId) {
+  // Hide all target panels
+  for (let i = 4; i <= 9; i++) {
+    const p = document.getElementById('panel' + i);
+    if (p) p.classList.add('hidden');
+  }
+
+  // Show the required two panels
+  const funcPanel = document.getElementById(funcPanelId);
+  const uiPanel = document.getElementById(uiPanelId);
+  if (funcPanel) funcPanel.classList.remove('hidden');
+  if (uiPanel) uiPanel.classList.remove('hidden');
+}
+</script>
+<div class="hidden fixed inset-0 z-50 bg-black bg-opacity-90 flex flex-col items-center justify-center text-white" id="scannerModal">
+<div class="absolute top-4 left-4">
+<button class="text-white text-2xl bg-transparent" onclick="backToSettingsFromScanner()">←</button>
+</div>
+<div class="absolute top-4 left-4">
+<button class="text-white text-2xl bg-transparent" onclick="closeScanner()">←</button>
+</div>
+<video autoplay="" id="scannerVideo" playsinline="" style="width: 300px; height: 300px; border: 2px solid white; border-radius: 16px;"></video>
+<p class="mt-4 text-green-400 hidden" id="scannerResult">✅ Linked</p>
+</div>
+</body>
+<script>
+function linkDevice() {
+  const scannerModal = document.getElementById("scannerModal");
+  const video = document.getElementById("scannerVideo");
+  const result = document.getElementById("scannerResult");
+  document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+  scannerModal.classList.remove("hidden");
+
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(stream => {
+    video.srcObject = stream;
+    video.play();
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    function scan() {
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        try {
+          const code = jsQR(imageData.data, canvas.width, canvas.height);
+          if (code) {
+            result.textContent = "✅ Linked with: " + code.data;
+            result.classList.remove("hidden");
+            stream.getTracks().forEach(track => track.stop());
+          } else {
+            requestAnimationFrame(scan);
+          }
+        } catch {
+          requestAnimationFrame(scan);
+        }
+      } else {
+        requestAnimationFrame(scan);
+      }
+    }
+    requestAnimationFrame(scan);
+  });
+}
+
+function closeScanner() {
+function backToSettingsFromScanner() {
+  closeScanner(); // stops video & hides scanner
+  document.getElementById('settingsSidebar')?.classList.remove('hidden');
+}
+
+  const scannerModal = document.getElementById("scannerModal");
+  const video = document.getElementById("scannerVideo");
+  if (video.srcObject) {
+    video.srcObject.getTracks().forEach(t => t.stop());
+  }
+  scannerModal.classList.add("hidden");
+  goToPage('dashboardPage');
+}
+</script>
+</html>
+<script>
+function linkDevice() {
+  const video = document.createElement('video');
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  const output = document.getElementById("linkedInfo");
+
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(stream => {
+    video.srcObject = stream;
+    video.setAttribute("playsinline", true);
+    video.play();
+    document.body.appendChild(video);
+    requestAnimationFrame(tick);
+  });
+
+  function tick() {
+    if (video.readyState === video.HAVE_ENOUGH_DATA) {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      try {
+        const code = jsQR(imageData.data, imageData.width, imageData.height);
+        if (code) {
+          output.classList.remove("hidden");
+          output.innerText = "✅ Linked with: " + code.data;
+          video.srcObject.getTracks().forEach(track => track.stop());
+          video.remove();
+          return;
+        }
+      } catch (e) {}
+    }
+    requestAnimationFrame(tick);
+  }
+}
+function logoutApp() {
+  if (confirm("Are you sure you want to logout?")) {
+    localStorage.clear();
+    alert("Logged out!");
+    location.reload();
+  }
+}
+</script>
+<script>
+function applyTranslations(lang) {
+  const dictionary = {
+    "en": {
+      "welcome": "Welcome to Auto Smart Bot",
+      "logout": "Logout",
+      "settings": "Settings"
+    },
+    "hi": {
+      "welcome": "ऑटो स्मार्ट बॉट में आपका स्वागत है",
+      "logout": "लॉगआउट",
+      "settings": "सेटिंग्स"
+    },
+    "bn": {
+      "welcome": "অটো স্মার্ট বট-এ স্বাগতম",
+      "logout": "লগআউট",
+      "settings": "সেটিংস"
+    },
+    "te": {
+      "welcome": "ఆటో స్మార్ట్ బాట్‌కి స్వాగతం",
+      "logout": "లాగ్అవుట్",
+      "settings": "సెట్టింగ్స్"
+    },
+    "mr": {
+      "welcome": "ऑटो स्मार्ट बॉटमध्ये आपले स्वागत आहे",
+      "logout": "बाहेर पडा",
+      "settings": "सेटिंग्ज"
+    },
+    "ta": {
+      "welcome": "ஆட்டோ ஸ்மார்ட் பாட்டுக்கு வரவேற்கிறோம்",
+      "logout": "வெளியேறு",
+      "settings": "அமைப்புகள்"
+    },
+    "gu": {
+      "welcome": "ઓટો સ્માર્ટ બોટમાં આપનું સ્વાગત છે",
+      "logout": "લૉગઆઉટ",
+      "settings": "સેટિંગ્સ"
+    },
+    "pa": {
+      "welcome": "ਆਟੋ ਸਮਾਰਟ ਬੋਟ ਵਿੱਚ ਤੁਹਾਡਾ ਸਵਾਗਤ ਹੈ",
+      "logout": "ਲਾਗ ਆਉਟ",
+      "settings": "ਸੈਟਿੰਗਜ਼"
+    },
+    "ur": {
+      "welcome": "آٹو سمارٹ بوٹ میں خوش آمدید",
+      "logout": "لاگ آؤٹ",
+      "settings": "سیٹنگز"
+    },
+    "fr": {
+      "welcome": "Bienvenue sur Auto Smart Bot",
+      "logout": "Se déconnecter",
+      "settings": "Paramètres"
+    },
+    "es": {
+      "welcome": "Bienvenido a Auto Smart Bot",
+      "logout": "Cerrar sesión",
+      "settings": "Configuraciones"
+    },
+    "de": {
+      "welcome": "Willkommen bei Auto Smart Bot",
+      "logout": "Abmelden",
+      "settings": "Einstellungen"
+    },
+    "it": {
+      "welcome": "Benvenuto in Auto Smart Bot",
+      "logout": "Disconnettersi",
+      "settings": "Impostazioni"
+    },
+    "pt": {
+      "welcome": "Bem-vindo ao Auto Smart Bot",
+      "logout": "Sair",
+      "settings": "Configurações"
+    },
+    "zh": {
+      "welcome": "欢迎使用Auto Smart Bot",
+      "logout": "登出",
+      "settings": "设置"
+    },
+    "ja": {
+      "welcome": "オートスマートボットへようこそ",
+      "logout": "ログアウト",
+      "settings": "設定"
+    },
+    "ko": {
+      "welcome": "오토 스마트 봇에 오신 것을 환영합니다",
+      "logout": "로그아웃",
+      "settings": "설정"
+    },
+    "ru": {
+      "welcome": "Добро пожаловать в Auto Smart Bot",
+      "logout": "Выйти",
+      "settings": "Настройки"
+    }
+  };
+
+  const translations = dictionary[lang];
+  if (!translations) return;
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (translations[key]) el.innerText = translations[key];
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const lang = localStorage.getItem("appLang");
+  if (lang) applyTranslations(lang);
+
+  const savedColor = localStorage.getItem("themeColor");
+  if (savedColor) {
+    const dash = document.getElementById("dashboardPage");
+    if (dash) dash.style.backgroundColor = savedColor;
+  }
+});
+</script>
+<div class="page hidden" id="transportPage">
+<div class="bg-teal-600 text-white px-4 py-3"><div class="flex items-center gap-3"><button class="text-white bg-transparent px-3 py-1 rounded" onclick="goToPage('dashboardPage')"><i class="fas fa-arrow-left"></i></button><h2 class="text-lg font-bold text-white">Transport Booking</h2></div></div>
+<div class="p-4 space-y-3 bg-white text-teal-600">
+<a class="block bg-gray-100 p-3 rounded" href="https://book.olacabs.com/" target="_blank">Ola Cabs</a>
+<a class="block bg-gray-100 p-3 rounded" href="https://m.uber.com/" target="_blank">Uber</a>
+<a class="block bg-gray-100 p-3 rounded" href="https://www.merucabs.com/" target="_blank">Meru Cabs</a>
+<a class="block bg-gray-100 p-3 rounded" href="https://www.savaari.com/" target="_blank">Savaari Car Rentals</a>
+<a class="block bg-gray-100 p-3 rounded" href="https://www.carzonrent.com/" target="_blank">Carzonrent</a>
+</div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const tile = [...document.querySelectorAll('.tile')].find(t => t.textContent.includes('Transport'));
+  if (tile) tile.setAttribute('onclick', "goToPage('transportPage')");
+});
+</script>
+<div class="page hidden" id="foodPage">
+<div class="bg-teal-600 text-white px-4 py-3"><div class="flex items-center gap-3"><button class="text-white bg-transparent px-3 py-1 rounded" onclick="goToPage('dashboardPage')"><i class="fas fa-arrow-left"></i></button><h2 class="text-lg font-bold text-white">Food Booking</h2></div></div>
+<div class="p-4 space-y-3 bg-white text-teal-600">
+<a class="block bg-gray-100 p-3 rounded" href="https://www.zomato.com/" target="_blank">Zomato</a>
+<a class="block bg-gray-100 p-3 rounded" href="https://www.swiggy.com/" target="_blank">Swiggy</a>
+<a class="block bg-gray-100 p-3 rounded" href="https://www.ubereats.com/" target="_blank">Uber Eats</a>
+<a class="block bg-gray-100 p-3 rounded" href="https://www.dominos.co.in/" target="_blank">Domino's</a>
+<a class="block bg-gray-100 p-3 rounded" href="https://www.grubhub.com/" target="_blank">Grubhub</a>
+</div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const tile = [...document.querySelectorAll('.tile')].find(t => t.textContent.includes('Food'));
+  if (tile) tile.setAttribute('onclick', "goToPage('foodPage')");
+});
+</script>
+<!-- ✅ APPOINTMENT PANEL (GOOGLE API STRUCTURE) -->
+<div class="page hidden" id="appointmentPage" style="display: none;">
+<div class="bg-teal-600 text-white px-4 py-3"><div class="flex items-center gap-3"><button class="text-white bg-transparent px-3 py-1 rounded" onclick="goToPage('dashboardPage')"><i class="fas fa-arrow-left"></i></button><h2 class="text-lg font-bold text-white">Nearby Appointments</h2></div></div>
+<div class="flex-1 overflow-y-auto p-4 space-y-4 bg-white text-teal-600">
+<div class="text-sm text-gray-700">Searching via Google Places API...</div>
+<div class="space-y-3" id="appointmentList"></div>
+</div>
+</div>
+<script>
+const API_KEY = "YOUR_API_KEY";
+
+async function fetchNearbyPlaces(lat, lng) {
+  const radius = 2000;
+  const types = ["doctor", "hair_care", "beauty_salon"];
+  const container = document.getElementById("appointmentList");
+  container.innerHTML = "<div>Loading nearby services...</div>";
+
+  for (const type of types) {
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&key=${API_KEY}`;
+    const proxy = "https://cors-anywhere.herokuapp.com/";
+
+    try {
+      const res = await fetch(proxy + url);
+      const data = await res.json();
+      if (data.results) {
+        data.results.forEach(place => {
+          const card = document.createElement("div");
+          card.className = "appointment-card";
+          card.innerHTML = `
+            <h3>${place.name}</h3>
+            <div class="category">${type.replace("_", " ")} · ${place.vicinity || "Nearby"}</div>
+            <div class="text-sm text-gray-600">${place.opening_hours?.open_now ? 'Open Now' : 'Closed'}</div>
+            <button onclick="bookGoogle('${place.name}', '${type}', '${place.vicinity || ''}')">Book Appointment</button>
+          `;
+          container.appendChild(card);
+        });
+      }
+    } catch {
+      container.innerHTML += `<div class='text-red-500'>Failed to fetch ${type} results.</div>`;
+    }
+  }
+}
+
+function bookGoogle(name, type, place) {
+  const text = `Appointment booked:\n${name} (${type})\nLocation: ${place}`;
+  alert(text);
+  if (navigator.share) {
+    navigator.share({ title: "Appointment Confirmed", text }).catch(err => alert("Share failed: " + err));
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const tile = [...document.querySelectorAll('.tile')].find(t => t.textContent.includes('Appointment'));
+  if (tile) tile.setAttribute('onclick', "goToPage('appointmentPage')");
+  navigator.geolocation.getCurrentPosition(pos => {
+    fetchNearbyPlaces(pos.coords.latitude, pos.coords.longitude);
+  }, err => {
+    document.getElementById("appointmentList").innerHTML =
+      "<div class='text-red-600'>Location access denied. Cannot fetch nearby appointments.</div>";
+  });
+});
+</script>
+<style>
+  .appointment-card {
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 10px;
+    background: #f9f9f9;
+  }
+  .appointment-card h3 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+  }
+  .appointment-card .category {
+    font-size: 13px;
+    color: #555;
+  }
+  .appointment-card button {
+    margin-top: 8px;
+    background: #4f46e5;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+</style>
+<script>
+
+
+
+
+
+
+
+
+window.onload = () => {
+  document.getElementById("addProductBtn").addEventListener("click", addRow);
+  document.getElementById("saveBtn").addEventListener("click", saveInvoice);
+  document.getElementById("pdfBtn").addEventListener("click", generatePDF);
+  document.getElementById("recordBtn").addEventListener("click", showRecords);
+  addRow();
+  const upi = localStorage.getItem("upi_id");
+  if (upi) {
+    document.getElementById("paySection").style.display = "block";
+    document.getElementById("upiText").textContent = "Pay via UPI: " + upi;
+  }
+};
+</script>
+<script>
+function showPanel(funcPanelId, uiPanelId) {
+  // Hide all target panels
+  for (let i = 4; i <= 9; i++) {
+    const p = document.getElementById('panel' + i);
+    if (p) p.classList.add('hidden');
+  }
+
+  // Show the required two panels
+  const funcPanel = document.getElementById(funcPanelId);
+  const uiPanel = document.getElementById(uiPanelId);
+  if (funcPanel) funcPanel.classList.remove('hidden');
+  if (uiPanel) uiPanel.classList.remove('hidden');
+}
+</script>
+<div class="hidden fixed inset-0 z-50 bg-black bg-opacity-90 flex flex-col items-center justify-center text-white" id="scannerModal">
+<div class="absolute top-4 left-4">
+<button class="text-white text-2xl bg-transparent" onclick="backToSettingsFromScanner()">←</button>
+</div>
+<div class="absolute top-4 left-4">
+<button class="text-white text-2xl bg-transparent" onclick="closeScanner()">←</button>
+</div>
+<video autoplay="" id="scannerVideo" playsinline="" style="width: 300px; height: 300px; border: 2px solid white; border-radius: 16px;"></video>
+<p class="mt-4 text-green-400 hidden" id="scannerResult">✅ Linked</p>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const panels = {
+    panel1: document.getElementById('panel1'),
+    panel2: document.getElementById('panel2'),
+    panel3: document.getElementById('panel3'),
+  };
+
+  document.querySelector('[data-func="appInfo"]')?.addEventListener("click", () => {
+    Object.values(panels).forEach(p => p.classList.remove('active'));
+    panels.panel3.innerHTML = `
+      <div class="back-btn" id="backTo2">←</div>
+      <h3>App Info</h3>
+      <p><strong>App:</strong> Auto Smart Bot</p>
+      <p><strong>Version:</strong> 1.0.0</p>
+      <p><strong>Developer:</strong> Cosmos Enterprises</p>
+      <p><strong>Website:</strong> www.cosmosmeta.in</p>
+      <p><strong>Support:</strong> autosmartbot.helpdesk@gmail.com</p>
+      <p><strong>License:</strong> Lifetime Free</p>
+      <p><strong>Updated:</strong> June 2025</p>`;
+    panels.panel3.classList.add("active");
+
+    document.getElementById("backTo2").addEventListener("click", () => {
+      panels.panel3.classList.remove("active");
+      panels.panel1.classList.add("active");
+    });
+  });
+});
+</script></body>
+<script>
+function linkDevice() {
+  const scannerModal = document.getElementById("scannerModal");
+  const video = document.getElementById("scannerVideo");
+  const result = document.getElementById("scannerResult");
+  document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+  scannerModal.classList.remove("hidden");
+
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(stream => {
+    video.srcObject = stream;
+    video.play();
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    function scan() {
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        try {
+          const code = jsQR(imageData.data, canvas.width, canvas.height);
+          if (code) {
+            result.textContent = "✅ Linked with: " + code.data;
+            result.classList.remove("hidden");
+            stream.getTracks().forEach(track => track.stop());
+          } else {
+            requestAnimationFrame(scan);
+          }
+        } catch {
+          requestAnimationFrame(scan);
+        }
+      } else {
+        requestAnimationFrame(scan);
+      }
+    }
+    requestAnimationFrame(scan);
+  });
+}
+
+function closeScanner() {
+function backToSettingsFromScanner() {
+  closeScanner(); // stops video & hides scanner
+  document.getElementById('settingsSidebar')?.classList.remove('hidden');
+}
+
+  const scannerModal = document.getElementById("scannerModal");
+  const video = document.getElementById("scannerVideo");
+  if (video.srcObject) {
+    video.srcObject.getTracks().forEach(t => t.stop());
+  }
+  scannerModal.classList.add("hidden");
+  goToPage('dashboardPage');
+}
+</script>
+</html>
+<!-- ✅ SCRIPT SECTION -->
+<script>
+const pages = document.querySelectorAll(".page");
+function goToPage(id) {
+  pages.forEach(p => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  history.pushState({ page: id }, '', '#' + id);
+}
+window.addEventListener("popstate", function (e) {
+  if (e.state && e.state.page) goToPage(e.state.page);
+});
+history.replaceState({ page: "subscribePage" }, '', '#subscribePage');
+
+// Subscribe logic
+document.getElementById('subscribeNowBtn')?.addEventListener('click', () => {
+  document.getElementById('paymentPrompt').style.display = 'none';
+  document.getElementById('qrSection').style.display = 'flex';
+});
+document.getElementById('paidBtn')?.addEventListener('click', () => {
+  alert("Thank you! You are now subscribed.");
+  goToPage('coverPage');
+});
+
+// Navigation with Enter & Backspace
+document.addEventListener("keydown", function (e) {
+  const currentPage = [...pages].find(p => p.classList.contains("active"));
+  const activeEl = document.activeElement;
+  const isInputFocused = activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA';
+  if (e.key === "Enter") {
+    if (currentPage.id === "subscribePage") {
+      const qrVisible = document.getElementById('qrSection').style.display === 'flex';
+      if (!qrVisible) document.getElementById('subscribeNowBtn')?.click();
+      else document.getElementById('paidBtn')?.click();
+    } else if (currentPage.id === "coverPage") {
+      goToPage("dashboardPage");
+    } else if (currentPage.id === "dashboardPage" && !isInputFocused) {
+      saveChanges();
+    }
+  }
+  if (e.key === "Backspace" && !isInputFocused) {
+    if (currentPage.id === "coverPage") goToPage("subscribePage");
+    else if (currentPage.id === "dashboardPage") goToPage("coverPage");
+  }
+});
+
+// Profile logic
+function toggleProfileSidebar() {
+  document.getElementById('settingsSidebar')?.classList.add('hidden');
+  document.getElementById('profileSidebar').classList.toggle('hidden');
+}
+function editField(id, btn) {
+  const input = document.getElementById(id);
+  input.disabled = !input.disabled;
+  btn.textContent = input.disabled ? "✏️" : "✅";
+}
+function saveChanges() {
+  alert("Changes saved!");
+}
+document.getElementById('profile-pic')?.addEventListener('click', function () {
+  document.getElementById('image-options').classList.toggle('hidden');
+});
+const uploadInput = document.getElementById('upload-input');
+const profileImage = document.getElementById('profile-image');
+const imageText = document.getElementById('image-text');
+const topProfilePic = document.getElementById('topProfilePic');
+const defaultProfileIcon = document.getElementById('defaultProfileIcon');
+
+uploadInput?.addEventListener('change', (e) => {
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    profileImage.src = ev.target.result;
+    profileImage.classList.remove('hidden');
+    imageText.classList.add('hidden');
+    topProfilePic.src = ev.target.result;
+    topProfilePic.style.display = 'block';
+    defaultProfileIcon.style.display = 'none';
+  };
+  reader.readAsDataURL(e.target.files[0]);
+});
+function removeImage() {
+  if (confirm("Remove profile image?")) {
+    profileImage.src = "";
+    profileImage.classList.add('hidden');
+    imageText.classList.remove('hidden');
+    uploadInput.value = "";
+    topProfilePic.src = "";
+    topProfilePic.style.display = 'none';
+    defaultProfileIcon.style.display = 'inline';
+  }
+}
+function showModal() {
+  const img = document.getElementById('profile-image');
+  if (img.src) {
+    document.getElementById('modalImage').src = img.src;
+    document.getElementById('viewModal').classList.remove('hidden');
+  }
+}
+function closeModal() {
+  document.getElementById('viewModal').classList.add('hidden');
+}
+
+// Camera
+let videoStream;
+function openCameraModal() {
+  const video = document.getElementById('cameraFeed');
+  navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+    videoStream = stream;
+    video.srcObject = stream;
+    document.getElementById('cameraModal').classList.remove('hidden');
+  }).catch(() => alert("Camera access denied."));
+}
+function capturePhoto() {
+  const video = document.getElementById('cameraFeed');
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  const dataUrl = canvas.toDataURL('image/png');
+  profileImage.src = dataUrl;
+  profileImage.classList.remove('hidden');
+  imageText.classList.add('hidden');
+  topProfilePic.src = dataUrl;
+  topProfilePic.style.display = 'block';
+  defaultProfileIcon.style.display = 'none';
+  closeCameraModal();
+}
+function closeCameraModal() {
+  document.getElementById('cameraModal').classList.add('hidden');
+  if (videoStream) {
+    videoStream.getTracks().forEach(t => t.stop());
+    videoStream = null;
+  }
+}
+
+// Emoji Picker
+const emojiContainer = document.getElementById('emoji-picker-container');
+function openEmojiPicker(targetInput, triggerBtn) {
+  emojiContainer.innerHTML = '';
+  const picker = new EmojiMart.Picker({
+    onEmojiSelect: emoji => targetInput.value += emoji.native,
+    locale: 'en',
+    theme: 'light',
+    emojiButtonSize: 36,
+    emojiSize: 22,
+    set: 'native',
+    data: EmojiMart.data
+  });
+  emojiContainer.appendChild(picker);
+  const rect = triggerBtn.getBoundingClientRect();
+  emojiContainer.style.left = `${rect.left + window.scrollX}px`;
+  emojiContainer.style.top = `${rect.top + window.scrollY - 350}px`;
+  emojiContainer.classList.remove('hidden');
+}
+document.addEventListener('click', (e) => {
+  if (!emojiContainer.contains(e.target) && !e.target.closest('button')) {
+    emojiContainer.classList.add('hidden');
+  }
+});
+document.getElementById('emoji-name')?.addEventListener('click', e =>
+  openEmojiPicker(document.getElementById('name-input'), e.target));
+document.getElementById('emoji-about')?.addEventListener('click', e =>
+  openEmojiPicker(document.getElementById('about-input'), e.target));
+
+// Settings logic
+
+function toggleSettingsSidebar() {
+  document.getElementById('profileSidebar')?.classList.add('hidden');
+  const el = document.getElementById('settingsSidebar');
+  el.classList.toggle('hidden');
+  backToMain();
+
+}
+
+function closeSettings() {
+  document.getElementById('settingsSidebar').classList.add('hidden');
+}
+
+function openSetting(key) {
+  document.getElementById('settingsMain').classList.add('hidden');
+  document.getElementById('settingsDetail').classList.remove('hidden');
+  const title = {
+    account: ' Account', language: ' App Language', privacy: ' Privacy',
+    notifications: ' Notifications', update: '⬆️ App Update', invite: '🤝 Invite Friend',
+    linked: ' Linked Devices', payments: ' Payments', theme: ' Theme Color', logout: ' Logout',
+  }[key];
+  document.getElementById('featureTitle').innerText = title;
+  const content = {
+    
+    appinfo: `<div class='space-y-2'>
+      <p><strong>App Name:</strong> Auto Smart Bot</p>
+      <p><strong>Version:</strong> 1.0.0</p>
+      <p><strong>Developer:</strong> Cosmos Enterprises</p>
+      <p><strong>License:</strong> Lifetime Free</p>
+    </div>`,
+account: `<input type="email" placeholder="Email Address" class="w-full border rounded px-2 py-1" />
+      <input type="text" placeholder="Change Mobile Number" class="w-full border rounded px-2 py-1" />
+      <div class="flex gap-2">
+        <button class="bg-yellow-500 text-white px-3 py-1 rounded w-1/2 shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1">Add Account</button>
+        <button class="bg-yellow-500 text-white px-3 py-1 rounded w-1/2 shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1">Delete Account</button>
+      </div>`,
+    language: `<select class="w-full border px-2 py-1 rounded"><option>English</option><option>Hindi</option></select>`,
+    privacy: `<label>Profile Photo Visibility:</label><select class="w-full border px-2 py-1 rounded"><option>Everyone</option><option>My Contacts</option><option>My Contacts Except...</option><option>Nobody</option></select>
+      <label>About Visibility:</label><select class="w-full border px-2 py-1 rounded"><option>Everyone</option><option>My Contacts</option><option>My Contacts Except...</option><option>Nobody</option></select>
+      <label class="flex items-center justify-between mt-2">Live Location<input type="checkbox" class="ml-2"></label>`,
+    notifications: `<label class="flex items-center justify-between">Enable Notifications<input type="checkbox" checked class="ml-2"></label>`,
+    update: `<button onclick="alert('Checking for updates...')" class="bg-yellow-500 text-white w-full px-3 py-1 rounded shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1">Check for Updates</button>`,
+    invite: `<button onclick="alert('Share this app link with your friend!')" class="bg-green-500 text-white w-full px-3 py-1 rounded shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1">Share Link</button>`,
+    linked: `<button onclick="alert('Open scanner to link new device')" class="bg-yellow-500 text-white w-full px-3 py-1 rounded shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1">Open QR Scanner</button>`,
+    
+    theme: `<select class="w-full border px-2 py-1 rounded"><option>Default (Dark Blue)</option><option>Dark Mode</option><option>Light Mode</option><option>Pink Theme</option><option>Green Theme</option></select>`,
+    logout: `<button onclick="alert('Logging out...'); location.reload();" class="bg-yellow-500 text-white w-full px-3 py-2 rounded shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1">Confirm Logout</button>`
+  };
+  document.getElementById('featureContent').innerHTML = content[key];
+}
+function backToMain() {
+  document.getElementById('settingsMain').classList.remove('hidden');
+  document.getElementById('settingsDetail').classList.add('hidden');
+}
+</script><script>
+  function shareNow() {
+    if (navigator.share) {
+      navigator.share({
+        title: "What’s Auto Smart Bot",
+        text: "Try What’s Auto Smart Bot — The future of smart automation! 💡",
+        url: "https://example.com", // ← yahan aap actual website link ya APK hosting link de sakte ho
+      })
+      .then(() => console.log('✅ Shared successfully'))
+      .catch((error) => console.error('❌ Error sharing:', error));
+    } else {
+      alert("Sharing not supported on this device/browser.");
+    }
+  }
+</script>
+<script>
+const emojiPicker = document.getElementById('emoji-picker-container');
+let currentTargetInput = null;
+
+document.getElementById('emoji-name')?.addEventListener('click', (e) => {
+  currentTargetInput = document.getElementById('name-input');
+  showEmojiPicker(e.target);
+});
+
+document.getElementById('emoji-about')?.addEventListener('click', (e) => {
+  currentTargetInput = document.getElementById('about-input');
+  showEmojiPicker(e.target);
+});
+
+function showEmojiPicker(triggerBtn) {
+  const rect = triggerBtn.getBoundingClientRect();
+  emojiPicker.style.left = rect.left + window.scrollX + "px";
+  emojiPicker.style.top = rect.top + window.scrollY - 350 + "px";
+  emojiPicker.classList.remove('hidden');
+}
+
+emojiPicker.addEventListener('emoji-click', (event) => {
+  if (currentTargetInput) {
+    currentTargetInput.value += event.detail.unicode;
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (!emojiPicker.contains(e.target) && !e.target.closest('button')) {
+    emojiPicker.classList.add('hidden');
+  }
+});
+</script>
+<div class="hidden" id="settingsSidebar" style="
+  position: absolute;
+  top: 75px;
+  right: 20px;
+  width: 270px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: #00695c;
+  color: white;
+  padding: 20px;
+  border-radius: 16px;
+  z-index: 9999;">
+<div class="panel active" id="panel1">
+<h2 data-i18n="settings">Settings</h2>
+<ul class="function-list">
+<li id="accountBtn">Account</li>
+</ul>
+</div>
+<div class="panel" id="panel2"></div>
+<div class="panel" id="panel3"></div>
+</div>
+<script>
+function showPanelOnly(panelId) {
+  for (let i = 4; i <= 9; i++) {
+    const p = document.getElementById('panel' + i);
+    if (p) p.classList.add('hidden');
+  }
+  const target = document.getElementById(panelId);
+  if (target) target.classList.remove('hidden');
+}
+</script>
